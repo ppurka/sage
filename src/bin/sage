@@ -280,7 +280,15 @@ sage_setup() {
 
     # Display the startup banner
     if [ "$SAGE_BANNER" != "no" ]; then
-        cat "$SAGE_LOCAL/bin/sage-banner"
+        banner="$SAGE_LOCAL/bin/sage-banner"
+        space=$(( ( $(/usr/bin/tput cols) - $(head -n 1 "$banner" | wc -c)/3 )/2 ))
+        if [ $space -gt 0 ]; then
+            printf -vspace "%${space}s" ""
+            sed -e "s/^/$space/" "$banner"
+        else
+            cat "$banner"
+        fi
+        unset space banner
     fi
 
     maybe_sage_location
